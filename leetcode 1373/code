@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxSumBST(self, root: Optional[TreeNode]) -> int:
+        max_sum = 0
+
+        def dfs(node):
+            nonlocal max_sum
+            if not node:
+                return True, 0, float("inf"), float("-inf")
+
+            left_is_bst, left_sum, left_min, left_max = dfs(node.left)
+            right_is_bst, right_sum, right_min, right_max = dfs(node.right)
+
+            if left_is_bst and right_is_bst and left_max < node.val < right_min:
+                current_sum = node.val + left_sum + right_sum
+                max_sum = max(max_sum, current_sum)
+                current_min = min(left_min, node.val)
+                current_max = max(right_max, node.val)
+                return True, current_sum, current_min, current_max
+
+            return False, 0, 0, 0
+
+        dfs(root)
+        return max_sum
