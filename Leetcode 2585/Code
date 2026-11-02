@@ -1,0 +1,13 @@
+class Solution:
+    def waysToReachTarget(self, target, types):
+        MOD = 10**9 + 7
+
+        dp = [0] * (target + 1)
+        dp[0] = 1
+
+        for count, marks in types:
+            for score in range(target, 0, -1):
+                for j in range(1, min(count, score // marks) + 1):
+                    dp[score] = (dp[score] + dp[score - j * marks]) % MOD
+
+        return dp[target]
